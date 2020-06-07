@@ -90,17 +90,19 @@ class: inverse
 <iframe src="dashboard.html" class="plotly"></iframe> 
 --> 
 
-### Distribution of wine quality
+## Distribution of wine quality
 
 ```{r}
 p <- dat %>% 
-  count(quality) %>% 
-  ggplot(aes(quality, n)) + 
+  count(quality_cat, quality) %>% 
+  ggplot(aes(quality, n, fill = quality_cat, text = str_glue("{quality_cat}\nQuality: {quality}\nCount: {n}"))) + 
   geom_col() +
   theme_minimal() + 
-  labs(x = "Quality")
+  scale_fill_brewer(palette = palette) +
+  labs(x = "Quality") + 
+  theme(legend.position = "none")
 
-ggplotly(p) %>% 
+ggplotly(p, tooltip = "text") %>% 
   config(displayModeBar = FALSE)
 
 
@@ -158,7 +160,7 @@ fviz_pca_biplot(pca,
 # quality against all
 qual_x_all <- dat_long %>% 
   ggplot(aes(val, quality, colour = quality_cat)) + 
-  geom_jitter(aes(text = str_glue("Quality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.2) +
+  geom_jitter(aes(text = str_glue("Quality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.1) +
   geom_smooth(colour = 'black', linetype = 2, method = "lm", se = FALSE) +
   facet_wrap(~ var, scales = "free_x",nrow = 4) + 
   theme_minimal() + 
@@ -218,7 +220,7 @@ ggplotly(box, tooltip = "text") %>%
 
 ---
 
-## Choosing the right model 
+## Choosing the "right" model 
 
 .pull-left[
 ### Models selected
@@ -241,14 +243,15 @@ ggplotly(box, tooltip = "text") %>%
 
 - Two models that take very different approaches and comparing the results. 
   - One parametric; the other, nonparametric
-  - One inflexible; the other, flexible
+  - One inflexible ("biased"); the other, flexible ("non-biased")
 - What will the results tell us about the data?
 
   
 --
 
 - Advantages of LR: 
-  - intuitive probability framework
+  - intuitive probability framework of maximum likelihood
+  - low variance, sometimes improving prediction performance
   - output is simple to interpret
   - helps identifying the most significant features that explain the quality of wine (the "explainability" factor)
 
