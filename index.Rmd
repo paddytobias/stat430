@@ -70,9 +70,9 @@ my_kable <- function(x, ...) {
 ## The data, the aim
 
 - 1599 observations
-- 11 continuous variables covering variety of measurements in the wine
+- 11 continuous variables covering variety of measurements in wine
 - 1 ordinal variable rating the wine in terms of quality (3-8)
-Broken into two categories:
+- Broken into two categories:
   - <= 5 "low" quality wine
   - \> 5 "high" quality wine
 
@@ -101,7 +101,7 @@ p <- dat %>%
   labs(x = "Quality")
 
 ggplotly(p) %>% 
-  config()
+  config(displayModeBar = FALSE)
 
 
 ```
@@ -129,25 +129,7 @@ correlations between:
 - density and fixed acidity
 
 ---
-<!--
-```{r}
-# quality against all
-qual_x_all <- dat_long %>% 
-  ggplot(aes(val, quality, colour = quality_cat)) + 
-  geom_jitter(aes(text = str_glue("Quality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.2) +
-  geom_smooth(colour = 'black', linetype = 2, method = "lm", se = FALSE) +
-  facet_wrap(~ var, scales = "free_x",nrow = 2) + 
-  theme_minimal() + 
-  theme(axis.text.x = element_blank(), 
-        axis.ticks.x = element_blank()) +
-  scale_colour_brewer(palette=palette) +
-  labs(x = NULL, y = "Quality", title = "Linear trends") 
 
-ggplotly(qual_x_all, tooltip = "text", width = 1000, height = 700) %>% 
-  config(displayModeBar = FALSE) %>% 
-  layout(legend = list(orientation = "h", x = 0.2, y =-0.2))
-```
--->
 
 ## PCA - Which features provide the most "information"?
 
@@ -171,7 +153,28 @@ fviz_pca_biplot(pca,
 
 ---
 
-## Distributions of alcohol, acid volatility and sulphates
+
+```{r}
+# quality against all
+qual_x_all <- dat_long %>% 
+  ggplot(aes(val, quality, colour = quality_cat)) + 
+  geom_jitter(aes(text = str_glue("Quality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.2) +
+  geom_smooth(colour = 'black', linetype = 2, method = "lm", se = FALSE) +
+  facet_wrap(~ var, scales = "free_x",nrow = 2) + 
+  theme_minimal() + 
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank()) +
+  scale_colour_brewer(palette=palette) +
+  labs(x = NULL, y = "Quality", title = "Linear trends") 
+
+ggplotly(qual_x_all, tooltip = "text", width = 1000, height = 700) %>% 
+  config(displayModeBar = FALSE) %>% 
+  layout(legend = list(orientation = "h", x = 0.2, y =-0.2))
+```
+
+---
+
+## Distributions in alcohol, acid volatility and sulphates
 
 ```{r}
 box <- dat %>% 
