@@ -1,0 +1,119 @@
+
+h1, h2, h3 {
+  padding: 0px 10px 0px 10px;
+}
+
+h1 {
+  font-size: 45px !important;
+}
+
+h2 {
+  font-size: 35px !important;
+}
+
+h3 {
+  font-size: 25px !important;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz)
+
+
+.remark-slide-content { 
+  font-size: 30px;
+  font-style: 'Yanone Kaffeesatz';
+  max-width 100% !important;
+  top: 0px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.remark-slide-scaler {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  top: 0px;
+}
+
+
+
+p {
+  font-size: 20px;
+}
+
+ul li {
+  margin: 0px 0px 5px 5px;
+  font-size: 20px;
+}
+
+img {
+  max-width: 50%;
+  height: auto;
+}
+
+.right_img img {
+  float: right;
+  max-width: 100% !important;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ffff99 !important;
+}
+
+.title-slide {
+  background-image: url(img/wine.jpg);
+  background-size: 100%;
+}
+
+.title-slide h1,
+.title-slide h2,
+.title-slide h3 {
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.plotly {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  display:block;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0px;
+}
+
+.plot img {
+  max-width: 100%;
+  width: 70% !important;
+  height: 70% !important;
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 0px 20px 10px 0px;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+.remark-code, .remark-inline-code { 
+  font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; 
+}
+
+body { 
+  font-family: 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', 'Palatino', 'Microsoft YaHei', 'Songti SC', serif; 
+  
+}
