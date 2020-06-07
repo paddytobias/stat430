@@ -1,0 +1,162 @@
+---
+title: "Exploring the data"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: journal
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(caret)
+library(factoextra)
+
+dat <- read.delim("../data/winequality-red.csv", sep = ";") %>% 
+  as_tibble()
+dat <- dat %>% 
+  mutate(quality_cat = factor(ifelse(quality <= 5, "low", "high")))
+dat_norm <- preProcess(dat, method = c("center", "scale")) %>% 
+  predict(dat)
+dat_long <- dat %>% 
+  gather(var, val, -c(quality, quality_cat))
+
+palette = "Set2"
+
+pca <- prcomp(dat_norm %>% select(-c(quality, quality_cat)), scale. = TRUE)
+
+```
+
+Quick explore
+=======================================================================
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### PCA
+
+```{r}
+
+quality_cat <- as.factor(dat$quality_cat)
+
+
+fviz_pca_biplot(pca, 
+                col.ind = quality_cat, 
+                palette = "jco", 
+                addEllipses = TRUE, label = "var",
+                col.var = "black", repel = TRUE,
+                legend.title = "Wine quality (grouped)") +
+  theme(legend.position = "bottom")
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Distribution of wine quality
+
+```{r}
+p <- dat %>% 
+  count(quality) %>% 
+  ggplot(aes(quality, n)) + 
+  geom_col() +
+  theme_minimal() + 
+  labs(x = "Quality")
+
+ggplotly(p)
+```
+
+### Correlation matrix
+
+```{r}
+cor <- cor(dat %>% select(-c(quality_cat, quality))) 
+# come correlation between the acid variables, to be expected, but no other great 
+# correlations
+corrplot::corrplot(cor, type = "lower")
+```
+
+Predictors
+=======================================================================
+
+```{r}
+# quality against all
+qual_x_all <- dat_long %>% 
+  ggplot(aes(val, quality, colour = quality_cat)) + 
+  geom_jitter(aes(text = str_glue("Quality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.2) +
+  geom_smooth(colour = 'black', linetype = 2, method = "lm", se = FALSE) +
+  facet_wrap(~ var, scales = "free_x",nrow = 2) + 
+  theme_minimal() + 
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank()) +
+  scale_colour_brewer(palette=palette) +
+  labs(x = NULL, y = "Quality", title = "Linear trends") 
+
+ggplotly(qual_x_all, tooltip = "text", width = 1000, height = 700) %>% 
+  config(displayModeBar = FALSE) %>% 
+  layout(legend = list(orientation = "h", x = 0.2, y =-0.2))
+```
+
+Focusing
+=======================================================================
+
+Column {data-width=330}
+-----------------------------------------------------------------------
+
+### Alcohol
+```{r}
+# focusing on alcohol
+alchl <- dat %>% 
+  select(quality_cat, alcohol, quality) %>% 
+  mutate(quality_cat = fct_relevel(quality_cat, c("low", "high"))) %>% 
+  ggplot(aes(quality_cat, alcohol, colour=quality_cat)) + 
+  geom_jitter(aes(text= str_glue("Quality: {quality}\nAlcohol: {alcohol}")), alpha = 0.3) +
+  geom_boxplot(colour = "black")+
+  scale_colour_brewer(palette = palette) + 
+  theme_minimal() + 
+  theme(legend.position = 'none') + 
+  labs(y = "Alcohol", x = "Quality")
+
+ggplotly(alchl, tooltip = "text") %>% 
+  config(displayModeBar = FALSE)
+```
+
+
+Column {data-width=330}
+-----------------------------------------------------------------------
+### Acid volatility
+```{r}
+alchl <- dat %>% 
+  select(quality_cat, volatile.acidity, quality) %>% 
+  mutate(quality_cat = fct_relevel(quality_cat, c("low", "high"))) %>% 
+  ggplot(aes(quality_cat, volatile.acidity, colour=quality_cat)) + 
+  geom_jitter(aes(text= str_glue("Quality: {quality}\nAcid volatility: {volatile.acidity}")), alpha = 0.3) +
+  geom_boxplot(colour = "black")+
+  scale_colour_brewer(palette = palette) + 
+  theme_minimal() + 
+  theme(legend.position = 'none') + 
+  labs(y = "Acid volatility", x = "Quality")
+
+ggplotly(alchl, tooltip = "text") %>% 
+  config(displayModeBar = FALSE)
+```
+
+Column {data-width=330}
+-----------------------------------------------------------------------
+
+### Sulphates
+```{r}
+alchl <- dat %>% 
+  select(quality_cat, sulphates, quality) %>% 
+  mutate(quality_cat = fct_relevel(quality_cat, c("low", "high"))) %>% 
+  ggplot(aes(quality_cat, sulphates, colour=quality_cat)) + 
+  geom_jitter(aes(text= str_glue("Quality: {quality}\nSulphates: {sulphates}")), alpha = 0.3) +
+  geom_boxplot(colour = "black")+
+  scale_colour_brewer(palette = palette) + 
+  theme_minimal() + 
+  theme(legend.position = 'none') + 
+  labs(y = "Sulphates", x = "Quality")
+
+ggplotly(alchl, tooltip = "text") %>% 
+  config(displayModeBar = FALSE)
+```
