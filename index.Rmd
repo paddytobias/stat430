@@ -376,36 +376,9 @@ ggplotly(summary_accuracy_rf, tooltip = "text", width = 800, height = 500)  %>%
   layout(legend = list(orientation = "h", x = 0.2, y =-0.2))
 ```
 
-
 ---
 
 ## Logistic regression
-
-.pull-left[
-Trialling three options: 
-- use all predictor variables 
-- use a subset chosen using forward stepwise selection, leaving:
-  - alcohol
-  - volatile.acidity
-  - sulphates
-  - total.sulfur.dioxide
-  - citric.acid
-  - ~~free.sulfur.dioxide~~
-  - ~~fixed.acidity~~
-  - ~~chlorides~~
-- use only "Alcohol" to predict quality (wild card!)
-]
-
-.pull-right[
-- Using a generous classification algorithm:
-  - _p_("low") > 0.5, else "high"
-]
-
-???
-
-recall from above,the correlation between free and total sulfur dioxide (which are complements of each other probably), so just using total sulfur dioxide. 
-Likewise just using volatile acidity and not fixed acidity as well. 
-Chlorides and sulfates also correlated - didn't know "It appears that, in many cases, it is the relative ratio of the two ions that has the major flavor influence"
 
 ```{r}
 fit_logit <- train(quality_cat ~ .,
@@ -439,6 +412,37 @@ fit_logit_alchl <- train(quality_cat ~ alcohol,
 ```
 
 ---
+
+## Logistic regression
+
+.pull-left[
+Trialling three options: 
+- use all predictor variables 
+- use a subset chosen using forward stepwise selection, leaving:
+  - alcohol
+  - volatile.acidity
+  - sulphates
+  - total.sulfur.dioxide
+  - citric.acid
+  - ~~free.sulfur.dioxide~~
+  - ~~fixed.acidity~~
+  - ~~chlorides~~
+- use only "Alcohol" to predict quality (wild card!)
+]
+
+.pull-right[
+- Using a generous classification algorithm:
+  - _p_("low") > 0.5, else "high"
+]
+
+???
+
+recall from above,the correlation between free and total sulfur dioxide (which are complements of each other probably), so just using total sulfur dioxide. 
+Likewise just using volatile acidity and not fixed acidity as well. 
+Chlorides and sulfates also correlated - didn't know "It appears that, in many cases, it is the relative ratio of the two ions that has the major flavor influence"
+
+---
+
 
 ## Logistic regression 
 
