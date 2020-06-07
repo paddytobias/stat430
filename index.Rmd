@@ -177,6 +177,7 @@ ggplotly(qual_x_all, tooltip = "text", height = 700) %>%
 
 ---
 
+<!--
 ## Distributions in alcohol, acid volatility and sulphates
 
 ```{r}
@@ -198,9 +199,7 @@ ggplotly(box, tooltip = "text") %>%
 
 ```
 
-
-
----
+-->
 
 ## Choosing the "right" model
 
@@ -262,6 +261,18 @@ ggplotly(box, tooltip = "text") %>%
 correlated
   - despite being more of a "black box" than LR, RF provides the ability to determine the most important variables, helping with model explainability.
 
+???
+And why not the others?
+
+- KNN is a very effective model for classification, however the results are
+not easily interpreted against the original problem. 
+- Simple decision trees and bagging are inferior versions of random forests.
+- Similar to KNN, SVM are complex to explain the results. They are also difficult
+to train well, choosing the right kernel and parameters.
+- ANNs are highly complex and don't lend easily to explaining the results, 
+despite being a very effective classifier.
+
+
 ---
 
 ## LR vs RF 
@@ -271,21 +282,11 @@ correlated
 - LR assumes a linear relationship between the response and the features.
 - RF performs better than LR when there are interactions between features (multicollinearity) or when there is a non-linear relationship with the response
 - Of 243 classification problems, RF preformed better in terms of accuracy 69% of the time. 
-- The mean difference in accuracy was 0.029%
-- The study very dependent on datasets used for benchmarking
+- Very dependent on datasets used for benchmarking
 - RF tends to perform better as *p* and $\frac{p}{n}$ increase
 
----
 
-## ... And why not the others?
 
-- KNN is a very effective model for classification, however the results are
-not easily interpreted against the original problem. 
-- Simple decision trees and bagging are inferior versions of random forests.
-- Similar to KNN, SVM are complex to explain the results. They are also difficult
-to train well, choosing the right kernel and parameters.
-- ANNs are highly complex and don't lend easily to explaining the results, 
-despite being a very effective classifier.
 
 ---
 
@@ -476,8 +477,8 @@ err_rates_logit <- tibble(
 ) 
 
 tibble(
-  `Feature selection` = c("All", "Subset", "Alcohol only"), 
-  `Res. deviance p-value` =  "< 0.001"#c(res_dev_all, res_dev_sub)
+  `Feature selection` = c("All", "Subset", "Alcohol only")#, 
+  # `Res. deviance p-value` =  "< 0.001"#c(res_dev_all, res_dev_sub)
 ) %>% 
   inner_join(err_rates_logit, "Feature selection") %>% 
   rename(`Train error` = train_error, 
@@ -552,7 +553,7 @@ confusionMatrix(test$quality_cat, factor(test_rf$`ntree = 1000`))$table %>%
 
 ## Variable importance
 
-.plotly[
+.plot[
 ```{r}
 
 varimp_rf <- as.data.frame(varImp(fit_rf$`ntree = 1000`$finalModel)) %>% 
@@ -573,17 +574,16 @@ varimp_lr <- as.data.frame(varImp(fit_logit$finalModel)) %>%
 p <- bind_rows(varimp_rf, varimp_lr) %>% 
   # select(model, Predictors, proportion) %>%
   mutate(Predictors = fct_reorder(Predictors, proportion)) %>% 
-  ggplot(aes(Predictors, proportion, fill = model, text = str_glue("Overall: {round(Overall, 2)}\nProportional:{round(proportion, 2)}"))) +
+  ggplot(aes(Predictors, proportion, fill = model, text = str_glue("{Predictors}\nOverall: {round(Overall, 2)}\nProportional:{round(proportion, 2)}"))) +
   geom_bar(position = "dodge2", stat= "identity") + 
   # geom_segment( aes(y=Predictors, yend=Predictors, x=0, xend=proportion)) + 
   theme_minimal() +
   scale_fill_brewer(palette = palette) +
   coord_flip() +
-  labs(y = "Normalised importance", x = NULL)
+  labs(y = "Importance (standardised)", x = NULL, fill = NULL) + 
+  theme(legend.position = "bottom")
 
-ggplotly(p, tooltip = "text", width = 700) %>% 
-  config(displayModeBar = FALSE) %>% 
-  layout(legend = list(orientation = "h", x = 0.2, y =-0.2))
+p
 ```
 ]
 
