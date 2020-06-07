@@ -133,7 +133,7 @@ correlations between:
 ---
 
 
-## PCA - Which features provide the most "information"?
+## Which features provide the most "information"?
 
 .plot[
 ```{r}
@@ -442,8 +442,6 @@ fit_logit_alchl <- train(quality_cat ~ alcohol,
 
 ## Logistic regression 
 
-### Overall Goodness of fit
-
 ```{r}
 
 aov_all <- anova(fit_logit$finalModel, test="Chisq") 
@@ -597,11 +595,12 @@ variable importance of LR: the absolute value of the coefficients corresponding 
 
 .pull-left[
 - Random forest performs much, much better when predicting wine quality
-- Why does LR fail perform so poorly?
-  - Collinearity between predictors also weakens the LR performance
-  - Relationships between predictors and the log odds are not linear
+- Why does LR perform so poorly?
+  - Collinearity between predictors weakens the LR performance
+  - Relationships between predictors and the "high" / "low" odds are not linear
 - But LR is not wasted! It supports the qualitative findings from RF. 
-  - Most important variables for predicting wine quality: alcohol, acid volality, sulphates and sulfur dioxide
+- Most important variables for predicting wine quality: 
+  - alcohol, acid volality, sulphates and sulfur dioxide
 
 ]
 
