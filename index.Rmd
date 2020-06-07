@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, eval = TRU
 library(caret)
 library(randomForest)
 library(doParallel)
-library(factoextra)
+# library(factoextra)
 library(gridExtra)
 library(cluster)
 library(dendextend)
@@ -31,6 +31,7 @@ library(tidyverse)
 library(plotly)
 library(kableExtra)
 library(RColorBrewer)
+library(ggfortify)
 
 opts <- options(knitr.kable.NA = "")
 # load wine data
@@ -43,7 +44,7 @@ dat <- dat %>%
 dat_long <- dat %>% 
   gather(var, val, -c(quality, quality_cat))
 
-palette = "Set2"
+palette = "Set1"
 
 # functions
 post_resample <- function(fit, newdata, response,  model, param) {
@@ -142,13 +143,19 @@ dat_norm <- preProcess(dat, method = c("center", "scale")) %>%
 pca <- prcomp(dat_norm %>% select(-c(quality, quality_cat)), scale. = TRUE)
 quality_cat <- as.factor(dat$quality_cat)
 
-fviz_pca_biplot(pca, 
-                col.ind = quality_cat, 
-                palette = "jco", 
-                addEllipses = TRUE, label = "var",
-                col.var = "black", repel = TRUE,title = NULL,
-                legend.title = "Wine quality (grouped)") +
-  theme(legend.position = "bottom")
+
+p <- autoplot(pca, data = dat_norm, colour = 'quality_cat',
+         loadings = TRUE, loadings.colour = 'black', frame.type = 'norm', frame= TRUE, loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3) + 
+  geom_vline(xintercept = 0, linetype = 2, colour = "grey") +
+  geom_hline(yintercept = 0, linetype = 2, colour = "grey") +
+  scale_colour_brewer(palette = "Set1") +
+  theme_minimal() +
+  theme(legend.position = "none")
+  
+ggplotly(p) %>% 
+  config(displayModeBar = FALSE)
+
 
 ```
 ]
