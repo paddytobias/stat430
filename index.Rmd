@@ -93,17 +93,17 @@ my_kable <- function(x, ...) {
 
 - 1599 observations
 - 11 continuous variables covering variety of measurements in wine
-- 1 ordinal variable rating the wine in terms of quality (3-8)
-- Broken into two categories:
+- 1 ordinal variable rating the quality of wine (3-8)
+- Two levels of quality:
   - <= 5 "low" quality wine
   - \> 5 "high" quality wine
 
 --
 
 - The task: 
-  - use the data provided to train a model and predict wine quality ("high" or "low") (*classification problem*)
-  - compare performance of two models 
-  - explain which features contribute to the quality of wine.
+  - to use the data provided to train a model and predict wine quality ("high" or "low") (*classification problem*)
+  - to compare performance of two models 
+  - to explain which features contribute to the quality of wine.
 
 ---
 
@@ -127,7 +127,7 @@ ggplotly(p, tooltip = "text") %>%
 
 ---
 
-## Correlations
+## Correlations between features
 
 .plot[
 ```{r}
@@ -183,7 +183,7 @@ ggplotly(p) %>%
 # quality against all
 qual_x_all <- dat_long %>% 
   ggplot(aes(val, quality, colour = quality_cat)) + 
-  geom_jitter(aes(text = str_glue("Quality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.1) +
+  geom_jitter(aes(text = str_glue("{quality_cat}\nQuality: {quality}\n{var}: {val}")), show.legend = FALSE, alpha = 0.1) +
   geom_smooth(colour = 'black', linetype = 2, method = "lm", se = FALSE) +
   facet_wrap(~ var, scales = "free_x",nrow = 4) + 
   theme_minimal() + 
@@ -302,14 +302,11 @@ despite being a very effective classifier.
 
 ### Couronne, Probst and Boulesteix (2018)
 
-- LR assumes a linear relationship between the response and the features.
-- RF performs better than LR when there are interactions between features (multicollinearity) or when there is a non-linear relationship with the response
-- Of 243 classification problems, RF preformed better in terms of accuracy 69% of the time. 
+- Of 260 datasets with a binary response, RF preformed better in terms of accuracy 69% of the time. 
+- Accuracy $\mu$ ( $\sigma$ ): LR 82% (14); RF 85% (14)
 - Very dependent on datasets used for benchmarking
+- RF performs better than LR when there are interactions between features (multicollinearity) or when there is a non-linear relationship with the response
 - RF tends to perform better as *p* and $\frac{p}{n}$ increase
-
-
-
 
 ---
 
