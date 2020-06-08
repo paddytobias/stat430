@@ -398,7 +398,7 @@ ggplotly(summary_accuracy_rf, tooltip = "text", width = 800, height = 500)  %>%
 
 ---
 
-## Logistic regression
+## Logistic regression _p_("low")
 
 ```{r}
 fit_logit <- train(quality_cat ~ .,
