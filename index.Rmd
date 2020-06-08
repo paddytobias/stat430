@@ -1,9 +1,8 @@
 ---
-title: "What make's a good drop?"
+title: "What's in a good drop?"
 subtitle: "Oral presentation, STAT430"
-author: "Paddy Tobias"
-institute: "University of New England"
-date: "`r format(Sys.Date(), '%d %b %y')`"
+author: "Paddy Tobias, University of New England"
+date: "`r format(Sys.Date(), '%d %B %y')`"
 output:
   xaringan::moon_reader:
     css: ["default", "style.css"]
@@ -68,6 +67,28 @@ my_kable <- function(x, ...) {
 
 ```
 
+---
+
+## Overview
+
+--
+
+- Explore the data
+
+--
+
+- Discuss the two models chosen and why
+
+--
+
+- Explain the use of each
+
+--
+
+- Compare results
+
+---
+
 ## The data, the aim
 
 - 1599 observations
@@ -85,11 +106,6 @@ my_kable <- function(x, ...) {
   - explain which features contribute to the quality of wine.
 
 ---
-<!--
-class: inverse
-
-<iframe src="dashboard.html" class="plotly"></iframe> 
---> 
 
 ## Distribution of wine quality
 
@@ -621,6 +637,13 @@ variable importance of LR: the absolute value of the coefficients corresponding 
 
 ---
 
-## References
+## Cheers
+
+### References
 
 Couronné R, P Probst, A-L Boulesteix, 2018, _Random forest versus logistic regression: a large-scale benchmark experiment_, BMC Bioinformatics, Vol 19, DOI: 10.1186/s12859-018-2264-5
+
+### Images
+
+- [Photo by Pixabay from Pexels](https://www.pexels.com/photo/farm-land-during-sunset-51947/)
+- [Photo by JJ Jordan from Pexels](https://www.pexels.com/photo/man-holding-red-and-black-bottle-3115350/)
