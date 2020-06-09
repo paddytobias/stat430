@@ -307,7 +307,7 @@ despite being a very effective classifier.
 - Of 260 datasets with a binary response, RF preformed better in terms of accuracy 69% of the time. 
 - Accuracy $\mu$ ( $\sigma$ ): LR 82% (14); RF 85% (14)
 - Very dependent on datasets used for benchmarking
-- RF performs better than LR when there are correlations between features (multicollinearity) or when there is a non-linear relationship with the response and the odds
+- RF performs better than LR when there are correlations between features (multicollinearity) or when there is a non-linear relationship with the features and the odds
 - RF tends to perform better as *p* and $\frac{p}{n}$ increase
 
 ---
@@ -507,7 +507,8 @@ tibble(
   inner_join(err_rates_logit, "Feature selection") %>% 
   rename(`Train error` = train_error, 
          `Test error` = test_error) %>% 
-  kable(digits = 100)
+  arrange(`Test error`) %>% 
+  kable(digits = 100) 
 
 ```
 
@@ -539,7 +540,7 @@ err_rates_rf %>%
   bind_rows(err_rates_logit %>%
               filter(test_error == min(test_error)) %>% 
               mutate(model = "Logit", 
-                     param = "All features") %>% 
+                     param = "Subset") %>% 
             select(-`Feature selection`)) %>% 
   select(model, everything()) %>% 
   rename(`Train error` = train_error, 
@@ -559,14 +560,18 @@ err_rates_rf %>%
 
 confusionMatrix(test$quality_cat, factor(test_rf$`ntree = 1000`))$table %>% 
   broom::tidy() %>% 
+  group_by(Reference) %>% 
   mutate(total = sum(n), 
          `%` = round(n/total * 100, 2)) %>% 
   select(-total) %>% 
+  ungroup() %>% 
   cbind(
     confusionMatrix(test$quality_cat, factor(pred_logit_all$logit_pred_test))$table %>% 
       broom::tidy() %>% 
+      group_by(Reference) %>% 
       mutate(total = sum(n), 
-             `%` = round(n/total * 100, 2)) %>% 
+             `%` = round(n/total * 100, 2))%>% 
+      ungroup() %>% 
       select(-c(Prediction, Reference, total)) 
   ) %>% 
   my_kable(full_width = FALSE) %>% 
