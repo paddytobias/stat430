@@ -250,6 +250,8 @@ ggplotly(box, tooltip = "text") %>%
 - Random forest
 ]
 
+--
+
 .pull-right.inverse[
 ### Models not selected
 - K-nearest neighbours
