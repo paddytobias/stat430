@@ -564,6 +564,7 @@ confusionMatrix(test$quality_cat, factor(test_rf$`ntree = 1000`))$table %>%
   mutate(total = sum(n), 
          `%` = round(n/total * 100, 2)) %>% 
   select(-total) %>% 
+  select(Reference, everything()) %>% 
   ungroup() %>% 
   cbind(
     confusionMatrix(test$quality_cat, factor(pred_logit_all$logit_pred_test))$table %>% 
