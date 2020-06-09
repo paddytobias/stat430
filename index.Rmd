@@ -307,7 +307,7 @@ despite being a very effective classifier.
 - Of 260 datasets with a binary response, RF preformed better in terms of accuracy 69% of the time. 
 - Accuracy $\mu$ ( $\sigma$ ): LR 82% (14); RF 85% (14)
 - Very dependent on datasets used for benchmarking
-- RF performs better than LR when there are interactions between features (multicollinearity) or when there is a non-linear relationship with the response
+- RF performs better than LR when there are correlations between features (multicollinearity) or when there is a non-linear relationship with the response and the odds
 - RF tends to perform better as *p* and $\frac{p}{n}$ increase
 
 ---
@@ -523,7 +523,7 @@ Further, fitting only influential predictors worsens the test error result.
 
 class: center, inverse
 
-## Comparing the Best ofs...
+## Comparing the "best drops"...
 
 ---
 
@@ -636,7 +636,7 @@ variable importance of LR: the absolute value of the coefficients corresponding 
 
 ---
 
-## Cheers
+## Cheers...
 
 ### References
 
