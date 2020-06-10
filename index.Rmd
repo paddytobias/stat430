@@ -1,5 +1,5 @@
 ---
-title: "What's in a good drop?"
+title: "What makes a good drop?"
 subtitle: "Oral presentation, STAT430"
 author: "Paddy Tobias, University of New England"
 date: "`r format(Sys.Date(), '%d %B %y')`"
